@@ -1,5 +1,3 @@
-from collections import deque
-
 fileName = input("Please enter a filename with the extension: ")
 
 class vertex:
@@ -33,7 +31,7 @@ with open(fileName, "r") as f:
     line = f.readline()
     if line[0] == "D":
         Q = []
-        S = {}
+        S = []
         edges = []
         for line in f:
             lineList = line.split() #lineList contains [u, v, w]
@@ -55,7 +53,11 @@ with open(fileName, "r") as f:
             if vertexObj not in Q:
                 Q.append(vertexObj)
                 
-        
+        while Q != []:
+            u = min(Q)
+            print(u.name)
+            Q.remove(u)
+            S.append(u)
 
     else:
         print("This is an undirected graph")
