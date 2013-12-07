@@ -1,3 +1,5 @@
+#NOTE: -1 means infinity
+
 fileName = input("Please enter a filename with the extension: ")
 
 class vertex:
@@ -7,9 +9,9 @@ class vertex:
         self.pred = pred
 
     def __lt__(self, other):
-        if self.dist == "infinity":
+        if self.dist == -1:
             return False
-        elif other.dist == "infinity" and self.dist == "infinity":
+        elif other.dist == -1 and self.dist == -1:
             return False
         elif self.dist < other.dist:
             return True
@@ -17,9 +19,9 @@ class vertex:
             return False
 
     def __gt__(self, other):
-        if other.dist == "infinity" and self.dist == "infinity":
+        if other.dist == -1 and self.dist == -1:
             return False
-        elif self.dist != "infinity" and self.dist > other.dist:
+        elif self.dist != -1 and self.dist > other.dist:
             return True
         else:
             return False
@@ -52,7 +54,7 @@ with open(fileName, "r") as f:
             if lineList[0] == "s" or lineList[0] == "S":
                 vertexU = vertex(lineList[0], 0, None)
             else:
-                vertexU = vertex(lineList[0], "infinity", None)
+                vertexU = vertex(lineList[0], -1, None)
                 
             if vertexU not in Q:
                 Q.append(vertexU)
@@ -60,12 +62,11 @@ with open(fileName, "r") as f:
             if lineList[1] == "s" or lineList[1] == "S":
                 vertexV = vertex(lineList[1], 0, None)
             else:
-                vertexV = vertex(lineList[1], "infinity", None)
+                vertexV = vertex(lineList[1], -1, None)
             
             if vertexV not in Q:
                 Q.append(vertexV)
             edgeObj = edge(vertexU, vertexV, int(lineList[2]))
-            print("EDGE: v={0} and u={1}".format(edgeObj.u.name, edgeObj.v.name))
             edges.append(edgeObj)
                 
         while Q != []:
@@ -75,17 +76,14 @@ with open(fileName, "r") as f:
             S.append(u)
             for edge in edges: 
                 if edge.u == u:
-                    #print("v={0} and u={1}".format(edge.u.name, edge.v.name))
-                    #if edge.v in Q:
-                    index = edges.index(edge)
-                    if edge.v.dist == "infinity" or edge.v.dist > (u.dist + int(edge.weight)): #Relax
-                        edge.v.dist = u.dist + int(edge.weight)
-                        edge.v.pred = u
-                        if edge.v in Q:
-                            indexV = Q.index(edge.v)
-                            Q[indexV].dist = u.dist + int(edge.weight)  #Relax
-                            Q[indexV].pred = u
-                            print("v={0}, dist={1}".format(Q[indexV].name, Q[indexV].dist))
+                    vDist = None
+                    if edge.v in Q:
+                        vIndex = Q.index(edge.v)
+                        vDist = Q[vIndex].dist
+                        if vDist == -1 or (vDist > (u.dist + int(edge.weight))): #Relax
+                            vIndex = Q.index(edge.v)
+                            Q[vIndex].dist = u.dist + int(edge.weight)
+                            Q[vIndex].pred = u
 
         for v in S:
             print("v={0} and distance={1}".format(v.name, v.dist))
