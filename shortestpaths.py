@@ -91,19 +91,11 @@ with open(fileName, "r") as f:
                     if edge.u in Q: 
                         uIndex = Q.index(edge.u)
                         uDist = Q[uIndex].dist
-                        if xDist == -1 or (uDist > (x.dist + int(edge.weight))): # Relax
+                        if uDist == -1 or (uDist > (x.dist + int(edge.weight))): # Relax
                             Q[uIndex].dist = x.dist + int(edge.weight)
                             Q[uIndex].pred = x
                             
 
     for v in S:
         print("v={0} and distance={1}".format(v.name, v.dist))
-
-    #else:
-        #print("This is an undirected graph")
-
-    
-
-    #for line in f:
-    #   line
 
