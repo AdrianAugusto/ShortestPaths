@@ -77,13 +77,11 @@ with open(fileName, "r") as f:
     lengths = [] # The lengths of the shortest paths to the vertices
     for i in range(int(k)+1):
         lengths.append(-1)
-        print("i is {0}".format(lengths[i]))
     for i in range(len(vertices)):
         mem.append(lengths[:])
     #d(v, i) = min[d(u, i - 1) + w(u, v)] for all (u, v) in E
     while vertices != []:
         v = min(vertices)
-        print("VERTEX: {0}".format(v.name))
         indexV = vertexReceiver.index(v)
         if v.name == "S":
             mem[indexV][0] = 0
@@ -91,37 +89,32 @@ with open(fileName, "r") as f:
         vertices.remove(v)
         for i in range(1, int(k)+1):
             minimum = -1 # Reset minimum weight of path of length 1
-            firstMin = False # For assignment of first minimum to min
-            print("INDEX: {0}".format(i))
+            firstMin = True # For assignment of first minimum to min
             for edge in edges:
                 #print("Second for loop")
                 if edge.v == v:
-                    print("First if")
                     indexU = vertexReceiver.index(edge.u)
-                    if firstMin == False and mem[indexU][i-1] != -1:
+                    if firstMin == True and mem[indexU][i-1] != -1:
                         minimum = mem[indexU][i-1] + edge.weight
-                        print("First minimum v: {0} u: {1} mem: {2} weight: {3} index: {4} vIndex: {5} uIndex: {6}".format(edge.u.name, v.name, mem[indexU][i-1], edge.weight, i, indexV, indexU))
-                        firstMin = True
-                    if mem[indexU][i-1] != -1:
+                        firstMin = False
+                    elif firstMin == False and mem[indexU][i-1] != -1:
                         if mem[indexU][i-1] + edge.weight < minimum:
                             minimum = mem[indexU][i-1] + edge.weight
-                            print("Non minimum v: {0} u: {1} mem: {2} weight: {3} and index {4} vIndex: {5} uIndex: {6}".format(edge.u.name, v.name, mem[indexU][i-1], edge.weight, i, indexV, indexU))
                         
             mem[indexV][i] = minimum
-            for j in range(len(vertexReceiver)):
-                print("Index: {0} and mem[j][i]: {1}".format(i, mem[j][i]))
                 
                 
-    #Determine minimum shortest paths of all veritices
+    #Determine minimum shortest paths of all veritices within k
     for vertex in vertexReceiver:
-        firstShortestPath = False # For assignment of first shortest path to shortestpath
-        shortestPath = 0
-        for i in range(int(k)):
+        firstShortestPath = True # For assignment of first shortest path to shortestpath
+        shortestPath = -1
+        for i in range(int(k)+1):
             tempMem = mem[vertexReceiver.index(vertex)][i]
-            if firstShortestPath == False and tempMem != -1:
+            if firstShortestPath == True and tempMem != -1:
                 shortestPath = tempMem
-            if tempMem != -1:
-                if shortestPath < tempMem:
+                firstShortestPath = False
+            elif firstShortestPath == False and tempMem != -1:
+                if tempMem < shortestPath:
                     shortestPath = tempMem
         print("{0} - {1}".format(vertex.name, shortestPath))
     #for vertex in vertexReceiver:
