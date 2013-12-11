@@ -83,12 +83,15 @@ with open(fileName, "r") as f:
     while vertices != []:
         v = min(vertices)
         indexV = vertexReceiver.index(v)
+        indexU = -1
         if v.name == "S":
             mem[indexV][0] = 0
-        minimum = 0 # Minimum weight path of length i
+        minimum = -1 # Minimum weight path of length i for directed graphs
+        minimumD = -1
+        indexX = -1
+        indexY = -1
         vertices.remove(v)
         for i in range(1, int(k)+1):
-            minimum = -1 # Reset minimum weight of path of length 1
             firstMin = True # For assignment of first minimum to min
             for edge in edges:
                 #print("Second for loop")
@@ -100,9 +103,25 @@ with open(fileName, "r") as f:
                     elif firstMin == False and mem[indexU][i-1] != -1:
                         if mem[indexU][i-1] + edge.weight < minimum:
                             minimum = mem[indexU][i-1] + edge.weight
-                        
+                            
+                #if directed == False:
+                #    print("Here!")
+                #    firstMinD = True
+                #    if edge.u == v:
+                #        x = v #x is used for denoting edge (x, u) = (v, u)
+                #        indexX = vertexReceiver.index(edge.v)
+                #        indexU = vertexReceiver.index(edge.u)
+                #        print("Edge: u={0} v={1}".format(v.name, edge.u.name))
+                #        if firstMinD == True and mem[indexX][i-1] != -1:
+                #            minimumD = mem[indexX][i-1] + edge.weight
+                #            firstMinD = False
+                #        if firstMinD == False and mem[indexX][i-1] != -1:
+                #            if mem[indexX][i-1] + edge.weight < minimum:
+                #                minimum = mem[indexX][i-1] + edge.weight
+                #                print("Non firstMin: {0}".format(minimum))
+                #    mem[indexU][i] = minimumD
             mem[indexV][i] = minimum
-                
+            #print("MinimumD: {0} for vertex {1}".format(minimum, v.name))
                 
     #Determine minimum shortest paths of all veritices within k
     for vertex in vertexReceiver:
