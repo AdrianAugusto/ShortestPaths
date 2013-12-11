@@ -1,6 +1,9 @@
 #NOTE: -1 means infinity
 
 fileName = input("Please enter a filename with the extension: ")
+source = input("Please enter the source vertex: ")
+print("Dijkstra")
+print("Source: {0}".format(source))
 
 class vertex:
     def __init__(self, name, dist, pred):
@@ -53,7 +56,7 @@ with open(fileName, "r") as f:
         vertexU = None
         vertexV = None
             
-        if lineList[0] == "s" or lineList[0] == "S":
+        if lineList[0] == source:
             vertexU = vertex(lineList[0], 0, None)
         else:
             vertexU = vertex(lineList[0], -1, None)
@@ -61,7 +64,7 @@ with open(fileName, "r") as f:
         if vertexU not in Q:
             Q.append(vertexU)
                 
-        if lineList[1] == "s" or lineList[1] == "S":
+        if lineList[1] == source:
             vertexV = vertex(lineList[1], 0, None)
         else:
             vertexV = vertex(lineList[1], -1, None)
@@ -73,7 +76,6 @@ with open(fileName, "r") as f:
         
     while Q != []:
         u = min(Q)
-        print(u.name)
         Q.remove(u)
         S.append(u)
         for edge in edges: 
@@ -97,5 +99,5 @@ with open(fileName, "r") as f:
                             
 
     for v in S:
-        print("v={0} and distance={1}".format(v.name, v.dist))
-
+        print("NODE {0}: {1}".format(v.name, v.dist))
+print("End Dijkstra")

@@ -1,6 +1,8 @@
 fileName = input("Please enter a filename with the extension: ")
 k = input("Please enter maximum edges for the path to take: ")
-
+source = input("Please enter the source vertex: ")
+print("Shortest Reliable Paths Algorithm")
+print("Integer k: {0} Source: {1}".format(k, source))
 class vertex:
     def __init__(self, name, dist, pred):
         self.name = name
@@ -52,7 +54,7 @@ with open(fileName, "r") as f:
         vertexU = None
         vertexV = None
             
-        if lineList[0] == "s" or lineList[0] == "S":
+        if lineList[0] == source:
             vertexU = vertex(lineList[0], 0, None)
         else:
             vertexU = vertex(lineList[0], -1, None)
@@ -60,7 +62,7 @@ with open(fileName, "r") as f:
         if vertexU not in vertices:
             vertices.append(vertexU)
                 
-        if lineList[1] == "s" or lineList[1] == "S":
+        if lineList[1] == source:
             vertexV = vertex(lineList[0], 0, None)
         else:
             vertexV = vertex(lineList[1], -1, None)
@@ -84,7 +86,7 @@ with open(fileName, "r") as f:
         v = min(vertices)
         indexV = vertexReceiver.index(v)
         indexU = -1
-        if v.name == "S":
+        if v.name == source:
             mem[indexV][0] = 0
         minimum = -1 # Minimum weight path of length i for directed graphs
         minimumD = -1
@@ -135,6 +137,7 @@ with open(fileName, "r") as f:
             elif firstShortestPath == False and tempMem != -1:
                 if tempMem < shortestPath:
                     shortestPath = tempMem
-        print("{0} - {1}".format(vertex.name, shortestPath))
-    #for vertex in vertexReceiver:
-      #  print("Name: {0} Value: {1}".format(vertex.name, vertex.dist))
+        print("NODE {0}: {1}".format(vertex.name, shortestPath))
+    
+
+print("End Shortest Reliable Paths Algorithm")
